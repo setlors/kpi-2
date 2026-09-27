@@ -1,29 +1,29 @@
 ## Сутності
 
 ### User
-- id: number (PK)
+- id: int (PK)
 - username: string
 - email: string
 - password_hash: string
 
 ### Workout
-- id: number (PK)
-- user_id: number (FK)
+- id: int (PK)
+- user_id: int (FK)
 - workout_date: date
-- duration: number
+- duration: int
 
 ### Exercise
-- id: number (PK)
+- id: int (PK)
 - name: string
 - muscle_group: string
 
 ### WorkoutExercise
-- id: number (PK)
-- workout_id: number (FK)
-- exercise_id: number (FK)
-- sets: number
-- reps: number
-- weight: number
+- id: int (PK)
+- workout_id: int (FK)
+- exercise_id: int (FK)
+- sets: int
+- reps: int
+- weight: decimal
 
 ## Зв'язки
 
@@ -42,5 +42,5 @@
 - sets, reps — цілі додатні числа; weight_kg — невід'ємне число (0 допустимо для вправ без обтяження).
 - Тренування без жодного запису WorkoutExercise — допустимий стан (наприклад, ще не заповнене), але не повинно вважатися помилкою моделі.
 - Видалення Exercise, на яку є посилання в WorkoutExercise, заборонене або обробляється явно (щоб не лишались "осиротілі" записи).
-- Типи первинних і зовнішніх ключів узгоджені: всюди number, без змішування з string/UUID.
+- Типи первинних і зовнішніх ключів узгоджені: всюди INTEGER, без змішування з string/UUID.
 - Назви полів у spec.md, ER-діаграмі та коді повністю збігаються (наприклад, weight_kg — однаково всюди, а не weight в одному місці й подібна назва в іншому).
