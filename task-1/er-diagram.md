@@ -14,7 +14,7 @@ erDiagram
         int id PK
         int user_id FK
         date workout_date
-        int duration
+        int duration_minutes
     }
     EXERCISE {
         int id PK
@@ -27,6 +27,6 @@ erDiagram
         int exercise_id FK
         int sets
         int reps
-        decimal weight
+        decimal weight_kg
     }
 ```

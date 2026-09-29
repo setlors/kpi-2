@@ -12,7 +12,7 @@
 - id: int (PK)
 - user_id: int (FK)
 - workout_date: date
-- duration: int
+- duration_minutes: int
 
 ### EXERCISE
 
@@ -27,7 +27,7 @@
 - exercise_id: int (FK)
 - sets: int
 - reps: int
-- weight: decimal
+- weight_kg: decimal
 
 ## Зв'язки
 
