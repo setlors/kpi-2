@@ -43,4 +43,5 @@ Out of scope: managing the exercise catalog (adding or editing `EXERCISE` record
 - `ears-requirements.md`
 - `user-stories.md`
 - `gherkin-scenarios.md`
-- `use-case-diagram.md` and `traceability-matrix.md` (next steps)
+- `use-case-diagram.md`
+- `traceability-matrix.md`
