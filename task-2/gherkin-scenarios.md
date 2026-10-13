@@ -13,20 +13,20 @@ Feature: Accounts
   # R-02
   Scenario: SC-02 Log in with valid credentials
     Given a registered user
-    When the user logs in with the correct email and password
+    When a guest logs in with the correct email and password
     Then an authenticated session is started
 
   # R-03
   Scenario: SC-03 Log in with a wrong password
     Given a registered user
-    When the user logs in with a wrong password
+    When a guest logs in with a wrong password
     Then the login is rejected
     And no session is started
 
   # R-04
   Scenario: SC-04 Open workouts without logging in
-    Given a visitor who is not authenticated
-    When the visitor opens the workout history
+    Given a guest who is not authenticated
+    When the guest opens the workout history
     Then access is denied
 
 
@@ -84,6 +84,8 @@ Feature: History and reminders
   # R-11
   Scenario: SC-11 Send a reminder after 7 days
     Given a user whose latest workout_date was 7 days ago
-    When the 7th day passes
-    Then a reminder request is sent to NotificationService
+    And the user has no newer workout
+    When 7 days have passed since that workout_date
+    Then one reminder request is sent to NotificationService
+
 ```
