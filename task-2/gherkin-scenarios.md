@@ -12,14 +12,14 @@ Feature: Accounts
 
   # R-02
   Scenario: SC-02 Log in with valid credentials
-    Given a registered user
-    When a guest logs in with the correct email and password
+    Given a guest with a registered account
+    When the guest logs in with the correct email and password
     Then an authenticated session is started
 
   # R-03
   Scenario: SC-03 Log in with a wrong password
-    Given a registered user
-    When a guest logs in with a wrong password
+    Given a guest with a registered account
+    When the guest logs in with a wrong password
     Then the login is rejected
     And no session is started
 
