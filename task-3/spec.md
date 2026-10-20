@@ -1,48 +1,48 @@
 ## Intent
 
-Detail the dynamics of **UC-05 Add exercise to workout** (from `task2/use-case.md`): how a User adds one exercise with `sets`, `reps` and `weight_kg` to an existing workout, and how invalid input and access problems are handled.
+The diagram shows how UC-05 "Add exercise to workout" runs over time: the User submits an exercise with `sets`, `reps` and `weight_kg`, the system checks access, validates the values and creates a `WORKOUT_EXERCISE`, or rejects the request. It also shows that this step is optional, because a `WORKOUT` without exercises is valid.
 
 ## Chosen use case
 
-UC-05 (extends UC-04, includes UC-06 Validate exercise values; the access check UC-03 comes from the base UC-04). Requirements: R-06, R-07, R-04 (via UC-03). Scenarios: SC-07, SC-08, SC-09. Story: US-04.
+**UC-05 Add exercise to workout** (from Task 2).
+
+| Item         | Value                                                                                |
+| ------------ | ------------------------------------------------------------------------------------ |
+| Actor        | User                                                                                 |
+| Relations    | `extend` UC-04 (Record workout); the access check UC-03 reaches UC-05 through UC-04  |
+| Requirements | R-06, R-07, R-04, R-08                                                               |
+| Scenarios    | SC-07, SC-08, SC-09, SC-06                                                           |
+| User stories | US-xx: to be filled in (no user story file was available when this spec was written) |
 
 ## Participants
 
-| Participant        | Kind          | Maps to                                                                       |
-| ------------------ | ------------- | ----------------------------------------------------------------------------- |
-| User               | Actor (human) | `USER` entity; task 2 actor                                                   |
-| Workout tracker    | System        | the system boundary from `task2/use-case.md`                                  |
-| `WORKOUT`          | Data object   | `WORKOUT` (`id`, `user_id`)                                                   |
-| `EXERCISE`         | Data object   | `EXERCISE` (`id`, `name`)                                                     |
-| `WORKOUT_EXERCISE` | Data object   | `WORKOUT_EXERCISE` (`workout_id`, `exercise_id`, `sets`, `reps`, `weight_kg`) |
+- User (actor)
+- Workout tracker (the system inside the Task 2 boundary)
+- `WORKOUT`, `EXERCISE`, `WORKOUT_EXERCISE` (entities from `task1/spec.md`)
+- NotificationService does not take part: UC-05 is not linked to R-11.
 
-Not used here: Guest (not authenticated, see step 2a) and NotificationService (no reminder in this flow).
+## Steps of the scenario
 
-## Preconditions
+1. The User submits an exercise for an existing workout with `sets`, `reps` and `weight_kg` (SC-07).
+2. The system checks that the User is authenticated (UC-03 via UC-04, R-04). If not, access is denied and nothing is created.
+3. The system validates the values (R-07): `sets` and `reps` are positive integers, `weight_kg` is not negative. If not, it returns a validation error and nothing is created (SC-08). `weight_kg` = 0 is valid (SC-09).
+4. The system creates a `WORKOUT_EXERCISE` with `workout_id`, `exercise_id`, `sets`, `reps`, `weight_kg` (R-06, SC-07).
+5. The system confirms the result to the User.
 
-The user has an existing `WORKOUT` (created by UC-04, R-05, SC-05). The `EXERCISE` record exists (the catalog is managed outside the scope, see `task2/spec.md`).
-
-## Scenario steps
-
-1. The User sends `addExercise(workout_id, exercise_id, sets, reps, weight_kg)`, e.g. "Bench press", 3 sets, 10 reps, 60 `weight_kg` (SC-07).
-2. The system checks that the user is authenticated (UC-03, R-04).
-3. The system loads the `WORKOUT` by `workout_id` and the `EXERCISE` by `exercise_id`.
-4. The system checks that `WORKOUT.user_id` is the current user ("his or her workout", R-06) and that the `EXERCISE` exists.
-5. The system validates the values (UC-06, R-07): `sets` and `reps` are positive integers, `weight_kg` is not negative.
-6. The system creates a `WORKOUT_EXERCISE` linked through `workout_id` and `exercise_id` (R-06).
-7. The system confirms. The User may repeat from step 1 or stop. Stopping with zero exercises is valid (R-08, UC-04).
-
-Alternatives:
-
-- 2a. Not authenticated: access is denied, nothing is created (R-04).
-- 4a. The `WORKOUT` does not exist or belongs to another user (A-1), or the `EXERCISE` does not exist (A-2): the request is rejected.
-- 5a. Invalid values (`sets` 0, `reps` 0 or negative `weight_kg`): validation error, no `WORKOUT_EXERCISE` is created (R-07, SC-08).
-- 5b. `weight_kg` is 0: valid, continue with step 6 (SC-09).
+Optional step: if the User adds no exercise, the `WORKOUT` stays saved without an error (R-08, SC-06).
 
 ## Acceptance criteria
 
-- The diagram shows every step above as a message and contains `loop`, `alt` and `break` blocks.
-- Participant and parameter names match task 1 exactly (`WORKOUT`, `EXERCISE`, `WORKOUT_EXERCISE`, `workout_id`, `exercise_id`, `sets`, `reps`, `weight_kg`).
-- `WORKOUT_EXERCISE` is created only on the success branch.
-- Every branch traces to an R-xx or SC-xx. Branches without one are marked as assumptions (A-1, A-2, and 2a for SC).
-- Only actors from task 2 are used. No IDs or files of tasks 1 and 2 are changed.
+1. The diagram is written in Mermaid `sequenceDiagram` and its rendered image is committed.
+2. The participants are exactly those listed above; NotificationService is absent.
+3. Entity and field names match `task1/spec.md` exactly (`WORKOUT_EXERCISE`, `workout_id`, `exercise_id`, `sets`, `reps`, `weight_kg`).
+4. Every call has a direction arrow and a return message; call names are action names (for example `addExercise()`, `validateEntry()`).
+5. The order of messages is: access check, then validation, then creation of `WORKOUT_EXERCISE`.
+6. An `alt` branch shows an unauthenticated User: access is denied and no `WORKOUT_EXERCISE` is created (R-04).
+7. An `alt` branch shows invalid values (`sets` ≤ 0, `reps` ≤ 0 or `weight_kg` < 0): a validation error is returned and no `WORKOUT_EXERCISE` is created (R-07, SC-08).
+8. The success branch accepts `weight_kg` = 0 (SC-09).
+9. The success branch creates one `WORKOUT_EXERCISE` with both `workout_id` and `exercise_id` set (R-06, SC-07).
+10. An `opt` fragment shows that skipping the step leaves a saved `WORKOUT` without an error (R-08, SC-06).
+11. If a `loop` is used, it repeats the whole add cycle once per exercise (`WORKOUT` — `WORKOUT_EXERCISE` is 1:N in `task1/spec.md`).
+12. Each of R-04, R-06, R-07, R-08 and SC-06 to SC-09 appears in at least one message or fragment.
+13. No id or file from Tasks 1 and 2 is renamed or changed.
