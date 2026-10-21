@@ -12,10 +12,12 @@ sequenceDiagram
     loop while the user adds exercises (zero is valid, R-08)
         U->>S: addExercise(workout_id, exercise_id, sets, reps, weight_kg)
         S->>S: checkAccess() [UC-03, R-04]
+        S-->>S: authenticated or not
         break not authenticated
             S-->>U: accessDenied
         end
         S->>S: validateExerciseValues(sets, reps, weight_kg) [R-07, SC-08, SC-09]
+        S-->>S: valid or invalid
         alt values valid (weight_kg 0 is allowed)
             S->>WE: createWorkoutExercise(workout_id, exercise_id, sets, reps, weight_kg)
             WE-->>S: WORKOUT_EXERCISE(id)
