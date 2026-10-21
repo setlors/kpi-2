@@ -46,3 +46,4 @@ Optional step: if the User adds no exercise, the `WORKOUT` stays saved without a
 11. If a `loop` is used, it repeats the whole add cycle once per exercise (`WORKOUT` — `WORKOUT_EXERCISE` is 1:N in `task1/spec.md`).
 12. Each of R-04, R-06, R-07, R-08 and SC-06 to SC-09 appears in at least one message or fragment.
 13. No id or file from Tasks 1 and 2 is renamed or changed.
+14. Labels use only R-xx, SC-xx and UC-xx ids that exist in tasks 1 and 2.

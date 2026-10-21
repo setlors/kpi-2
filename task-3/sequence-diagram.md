@@ -22,7 +22,7 @@ sequenceDiagram
         break workout not the user's or exercise missing (A-1, A-2)
             S-->>U: rejected
         end
-        S->>S: validateExerciseValues(sets, reps, weight_kg) [UC-06, R-07]
+        S->>S: validateExerciseValues(sets, reps, weight_kg) [R-07, SC-08, SC-09]
         alt values valid (weight_kg 0 is allowed)
             S->>WE: createWorkoutExercise(workout_id, exercise_id, sets, reps, weight_kg)
             WE-->>S: WORKOUT_EXERCISE(id)
