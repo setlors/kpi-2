@@ -1,0 +1,45 @@
+flowchart TB
+    subgraph USER["Lane: User"]
+        S0(("Start<br/>WORKOUT is saved"))
+        D1{"Add an<br/>exercise?"}
+        A2["addExercise<br/>workout_id, exercise_id,<br/>sets, reps, weight_kg"]
+        E1((("End<br/>workout saved")))
+    end
+
+    subgraph WT["Lane: Workout tracker"]
+        A3["checkAccess<br/>UC-03, R-04"]
+        D4{"Authenticated?"}
+        A5["accessDenied<br/>nothing is created"]
+        E2((("End<br/>access denied")))
+        F6["FORK<br/>validateExerciseValues"]
+        A7a["Check sets<br/>is a positive integer"]
+        A7b["Check reps<br/>is a positive integer"]
+        A7c["Check weight_kg<br/>is not negative<br/>0 is valid"]
+        J8["JOIN"]
+        D9{"All checks<br/>passed?"}
+        A10["validationError<br/>nothing is created"]
+        A11["createWorkoutExercise<br/>then exerciseAdded"]
+    end
+
+    S0 --> D1
+    D1 -- "if yes" --> A2
+    D1 -- "else (R-08, SC-06)" --> E1
+    A2 --> A3
+    A3 --> D4
+    D4 -- "if yes" --> F6
+    D4 -- "else (R-04)" --> A5
+    A5 --> E2
+    F6 --> A7a
+    F6 --> A7b
+    F6 --> A7c
+    A7a --> J8
+    A7b --> J8
+    A7c --> J8
+    J8 --> D9
+    D9 -- "if yes (R-06, SC-07, SC-09)" --> A11
+    D9 -- "else (R-07, SC-08)" --> A10
+    A10 --> D1
+    A11 --> D1
+
+    classDef bar fill:#333,stroke:#333,color:#fff;
+    class F6,J8 bar;
