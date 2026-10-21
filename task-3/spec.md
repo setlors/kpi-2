@@ -6,13 +6,12 @@ The diagram shows how UC-05 "Add exercise to workout" runs over time: the User s
 
 **UC-05 Add exercise to workout** (from Task 2).
 
-| Item         | Value                                                                                |
-| ------------ | ------------------------------------------------------------------------------------ |
-| Actor        | User                                                                                 |
-| Relations    | `extend` UC-04 (Record workout); the access check UC-03 reaches UC-05 through UC-04  |
-| Requirements | R-06, R-07, R-04, R-08                                                               |
-| Scenarios    | SC-07, SC-08, SC-09, SC-06                                                           |
-| User stories | US-xx: to be filled in (no user story file was available when this spec was written) |
+| Item         | Value                                                                               |
+| ------------ | ----------------------------------------------------------------------------------- |
+| Actor        | User                                                                                |
+| Relations    | `extend` UC-04 (Record workout); the access check UC-03 reaches UC-05 through UC-04 |
+| Requirements | R-06, R-07, R-04, R-08                                                              |
+| Scenarios    | SC-07, SC-08, SC-09, SC-06                                                          |
 
 ## Participants
 

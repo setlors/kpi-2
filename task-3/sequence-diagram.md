@@ -15,13 +15,6 @@ sequenceDiagram
         break not authenticated
             S-->>U: accessDenied
         end
-        S->>W: findWorkout(workout_id)
-        W-->>S: WORKOUT(id, user_id)
-        S->>E: findExercise(exercise_id)
-        E-->>S: EXERCISE(id)
-        break workout not the user's or exercise missing (A-1, A-2)
-            S-->>U: rejected
-        end
         S->>S: validateExerciseValues(sets, reps, weight_kg) [R-07, SC-08, SC-09]
         alt values valid (weight_kg 0 is allowed)
             S->>WE: createWorkoutExercise(workout_id, exercise_id, sets, reps, weight_kg)
