@@ -6,14 +6,12 @@ The diagram shows the business process of UC-05 "Add exercise to workout": the U
 
 **UC-05 Add exercise to workout** (Task 2). Why: it is the use case that the Task 3 sequence diagram already details, so the process stays consistent with it.
 
-| Item      | Value                                                                                                  |
-| --------- | ------------------------------------------------------------------------------------------------------ |
-| R-06, R-08 | Linked to UC-05 in the Task 2 use case table                                                          |
-| R-07      | Linked to UC-05 in the Task 2 matrix note: "validation is a rule inside Add exercise to workout (UC-05)" |
-| R-04      | Reached through `extend` UC-04 and `include` UC-03 (Task 2 rule: a use case covers a requirement it reaches through `include` or `extend`) |
-| Scenarios | SC-06, SC-07, SC-08, SC-09                                                                             |
-
-The project has scenarios (SC-xx) only; there are no user stories.
+| Item       | Value                                                                                                                                      |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| R-06, R-08 | Linked to UC-05 in the Task 2 use case table                                                                                               |
+| R-07       | Linked to UC-05 in the Task 2 matrix note: "validation is a rule inside Add exercise to workout (UC-05)"                                   |
+| R-04       | Reached through `extend` UC-04 and `include` UC-03 (Task 2 rule: a use case covers a requirement it reaches through `include` or `extend`) |
+| Scenarios  | SC-06, SC-07, SC-08, SC-09                                                                                                                 |
 
 **Notation: activity diagram (Mermaid `flowchart`) with two swimlanes.** Why: the process is a flow of actions, decisions and a parallel branch between two roles, and swimlanes show who does each step.
 
@@ -27,22 +25,22 @@ Diagram source: `activity-diagram.mmd`. Rendered image: `activity-diagram.png` (
 
 ## Flow
 
-| #   | Lane            | Type     | Step                                                                                   | Next                                                          |
-| --- | --------------- | -------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| 0   | User            | Start    | A `WORKOUT` exists                                                                     | 1                                                             |
-| 1   | User            | Decision | Does the User add an exercise?                                                         | **If** yes → 2. **Else** → End "workout saved" (R-08, SC-06) |
-| 2   | User            | Action   | `addExercise(workout_id, exercise_id, sets, reps, weight_kg)`                          | 3                                                             |
-| 3   | Workout tracker | Action   | `checkAccess()` (UC-03, R-04)                                                          | 4                                                             |
-| 4   | Workout tracker | Decision | Is the User authenticated?                                                             | **If** yes → 6. **Else** → 5                                  |
-| 5   | Workout tracker | Action   | `accessDenied`; nothing is created (R-04)                                              | End "access denied"                                           |
-| 6   | Workout tracker | Fork     | `validateExerciseValues(sets, reps, weight_kg)` starts three parallel checks (R-07)    | 7a, 7b, 7c at the same time                                   |
-| 7a  | Workout tracker | Action   | Check that `sets` is a positive integer                                                | 8                                                             |
-| 7b  | Workout tracker | Action   | Check that `reps` is a positive integer                                                | 8                                                             |
-| 7c  | Workout tracker | Action   | Check that `weight_kg` is not negative (0 is valid, SC-09)                             | 8                                                             |
-| 8   | Workout tracker | Join     | Wait until 7a, 7b and 7c are all done                                                  | 9                                                             |
-| 9   | Workout tracker | Decision | Did all three checks pass?                                                             | **If** yes → 11. **Else** → 10                                |
-| 10  | Workout tracker | Action   | `validationError`; nothing is created (R-07, SC-08)                                    | 1                                                             |
-| 11  | Workout tracker | Action   | `createWorkoutExercise(workout_id, exercise_id, sets, reps, weight_kg)`, then `exerciseAdded` (R-06, SC-07) | 1                                       |
+| #   | Lane            | Type     | Step                                                                                                        | Next                                                         |
+| --- | --------------- | -------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| 0   | User            | Start    | A `WORKOUT` exists                                                                                          | 1                                                            |
+| 1   | User            | Decision | Does the User add an exercise?                                                                              | **If** yes → 2. **Else** → End "workout saved" (R-08, SC-06) |
+| 2   | User            | Action   | `addExercise(workout_id, exercise_id, sets, reps, weight_kg)`                                               | 3                                                            |
+| 3   | Workout tracker | Action   | `checkAccess()` (UC-03, R-04)                                                                               | 4                                                            |
+| 4   | Workout tracker | Decision | Is the User authenticated?                                                                                  | **If** yes → 6. **Else** → 5                                 |
+| 5   | Workout tracker | Action   | `accessDenied`; nothing is created (R-04)                                                                   | End "access denied"                                          |
+| 6   | Workout tracker | Fork     | `validateExerciseValues(sets, reps, weight_kg)` starts three parallel checks (R-07)                         | 7a, 7b, 7c at the same time                                  |
+| 7a  | Workout tracker | Action   | Check that `sets` is a positive integer                                                                     | 8                                                            |
+| 7b  | Workout tracker | Action   | Check that `reps` is a positive integer                                                                     | 8                                                            |
+| 7c  | Workout tracker | Action   | Check that `weight_kg` is not negative (0 is valid, SC-09)                                                  | 8                                                            |
+| 8   | Workout tracker | Join     | Wait until 7a, 7b and 7c are all done                                                                       | 9                                                            |
+| 9   | Workout tracker | Decision | Did all three checks pass?                                                                                  | **If** yes → 11. **Else** → 10                               |
+| 10  | Workout tracker | Action   | `validationError`; nothing is created (R-07, SC-08)                                                         | 1                                                            |
+| 11  | Workout tracker | Action   | `createWorkoutExercise(workout_id, exercise_id, sets, reps, weight_kg)`, then `exerciseAdded` (R-06, SC-07) | 1                                                            |
 
 **End "workout saved":** the User stops adding exercises; the `WORKOUT` stays saved without an error (R-08, SC-06).
 **End "access denied":** no `WORKOUT_EXERCISE` is created (R-04). No scenario exists for this path in Task 2 (the matrix marks R-04 as partial), so it is labelled with R-04 only.
