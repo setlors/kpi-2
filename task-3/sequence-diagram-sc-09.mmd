@@ -1,0 +1,14 @@
+sequenceDiagram
+    actor U as User
+    participant T as Workout tracker
+    participant WE as WORKOUT_EXERCISE
+
+    Note over U,T: SC-09 (R-07). Authenticated user with an existing workout
+    U->>+T: addExercise(workout_id, exercise_id, sets=3, reps=15, weight_kg=0)
+    T->>+T: validateEntry(sets, reps, weight_kg)
+    T-->>-T: valid
+    opt weight_kg = 0 is not negative, so it is accepted (R-07)
+        T->>+WE: create(workout_id, exercise_id, sets, reps, weight_kg)
+        WE-->>-T: WORKOUT_EXERCISE created
+    end
+    T-->>-U: exercise added

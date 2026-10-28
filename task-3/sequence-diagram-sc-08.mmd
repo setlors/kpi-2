@@ -1,0 +1,13 @@
+sequenceDiagram
+    actor U as User
+    participant T as Workout tracker
+
+    Note over U,T: SC-08 (R-07). Authenticated user with an existing workout
+    U->>+T: addExercise(workout_id, exercise_id, sets, reps, weight_kg)
+    Note right of U: Rows of the outline:<br/>(sets 3, reps 10, weight_kg -5)<br/>(sets 0, reps 10, weight_kg 40)<br/>(sets 3, reps 0, weight_kg 40)
+    T->>+T: validateEntry(sets, reps, weight_kg)
+    T-->>-T: invalid
+    break sets <= 0, reps <= 0 or weight_kg < 0 (R-07)
+        T-->>-U: validation error
+    end
+    Note over T: No WORKOUT_EXERCISE is created
