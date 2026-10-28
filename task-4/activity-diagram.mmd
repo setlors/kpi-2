@@ -11,14 +11,14 @@ flowchart TB
         D4{"Authenticated?"}
         A5["accessDenied<br/>nothing is created"]
         E2((("End<br/>access denied")))
-        F6["FORK<br/>validateExerciseValues"]
+        F6["validateEntry"]
         A7a["Check sets<br/>is a positive integer"]
         A7b["Check reps<br/>is a positive integer"]
         A7c["Check weight_kg<br/>is not negative<br/>0 is valid"]
         J8["JOIN"]
         D9{"All checks<br/>passed?"}
         A10["validationError<br/>nothing is created"]
-        A11["createWorkoutExercise<br/>then exerciseAdded"]
+        A11["create<br/>then exercise added"]
     end
 
     S0 --> D1
