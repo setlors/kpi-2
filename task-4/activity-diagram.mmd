@@ -3,10 +3,7 @@ title: "UC-05 Add exercise to workout (blue = User, green = Workout tracker)"
 ---
 flowchart LR
     S0(("Start<br/>WORKOUT exists"))
-    D1{"User:<br/>add an exercise?"}
     A2("User:<br/>addExercise<br/>workout_id, exercise_id,<br/>sets, reps, weight_kg")
-    E1((("End<br/>workout saved")))
-
     A3("Workout tracker:<br/>checkAccess<br/>UC-03, R-04")
     D4{"Authenticated?"}
     A5("accessDenied<br/>nothing is created")
@@ -19,10 +16,10 @@ flowchart LR
     D9{"All checks<br/>passed?"}
     A10("validation error<br/>nothing is created")
     A11("create<br/>then exercise added")
+    D12{"User:<br/>add another<br/>exercise?"}
+    E1((("End<br/>workout saved")))
 
-    S0 --> D1
-    D1 -- "if yes" --> A2
-    D1 -- "else (R-08, SC-06)" --> E1
+    S0 --> A2
     A2 --> A3
     A3 --> D4
     D4 -- "if yes: validateEntry" --> F6
@@ -37,8 +34,10 @@ flowchart LR
     J8 --> D9
     D9 -- "if yes (R-06, SC-07, SC-09)" --> A11
     D9 -- "else (R-07, SC-08)" --> A10
-    A10 --> D1
-    A11 --> D1
+    A10 --> A2
+    A11 --> D12
+    D12 -- "if yes" --> A2
+    D12 -- "else" --> E1
 
     classDef user fill:#dbeafe,stroke:#2563eb,color:#000;
     classDef wt fill:#dcfce7,stroke:#16a34a,color:#000;
@@ -46,5 +45,5 @@ flowchart LR
     classDef bar fill:#000,stroke:#000;
     class S0 start;
     class F6,J8 bar;
-    class D1,A2,E1 user;
+    class A2,D12,E1 user;
     class A3,D4,A5,E2,A7a,A7b,A7c,D9,A10,A11 wt;
