@@ -1,32 +1,31 @@
-flowchart TB
-    subgraph USER["Lane: User"]
-        S0(("Start<br/>WORKOUT exists"))
-        D1{"Add an<br/>exercise?"}
-        A2["addExercise<br/>workout_id, exercise_id,<br/>sets, reps, weight_kg"]
-        E1((("End<br/>workout saved")))
-    end
+---
+title: "UC-05 Add exercise to workout (blue = User, green = Workout tracker)"
+---
+flowchart LR
+    S0(("Start<br/>WORKOUT exists"))
+    D1{"User:<br/>add an exercise?"}
+    A2("User:<br/>addExercise<br/>workout_id, exercise_id,<br/>sets, reps, weight_kg")
+    E1((("End<br/>workout saved")))
 
-    subgraph WT["Lane: Workout tracker"]
-        A3["checkAccess<br/>UC-03, R-04"]
-        D4{"Authenticated?"}
-        A5["accessDenied<br/>nothing is created"]
-        E2((("End<br/>access denied")))
-        F6["validateEntry"]
-        A7a["Check sets<br/>is a positive integer"]
-        A7b["Check reps<br/>is a positive integer"]
-        A7c["Check weight_kg<br/>is not negative<br/>0 is valid"]
-        J8["JOIN"]
-        D9{"All checks<br/>passed?"}
-        A10["validationError<br/>nothing is created"]
-        A11["create<br/>then exercise added"]
-    end
+    A3("Workout tracker:<br/>checkAccess<br/>UC-03, R-04")
+    D4{"Authenticated?"}
+    A5("accessDenied<br/>nothing is created")
+    E2((("End<br/>access denied")))
+    F6@{ shape: fork, label: " " }
+    A7a("Check sets<br/>is a positive integer")
+    A7b("Check reps<br/>is a positive integer")
+    A7c("Check weight_kg<br/>is not negative<br/>0 is valid")
+    J8@{ shape: join, label: " " }
+    D9{"All checks<br/>passed?"}
+    A10("validation error<br/>nothing is created")
+    A11("create<br/>then exercise added")
 
     S0 --> D1
     D1 -- "if yes" --> A2
     D1 -- "else (R-08, SC-06)" --> E1
     A2 --> A3
     A3 --> D4
-    D4 -- "if yes" --> F6
+    D4 -- "if yes: validateEntry" --> F6
     D4 -- "else (R-04)" --> A5
     A5 --> E2
     F6 --> A7a
@@ -41,5 +40,11 @@ flowchart TB
     A10 --> D1
     A11 --> D1
 
-    classDef bar fill:#333,stroke:#333,color:#fff;
+    classDef user fill:#dbeafe,stroke:#2563eb,color:#000;
+    classDef wt fill:#dcfce7,stroke:#16a34a,color:#000;
+    classDef start fill:#111,stroke:#111,color:#fff;
+    classDef bar fill:#000,stroke:#000;
+    class S0 start;
     class F6,J8 bar;
+    class D1,A2,E1 user;
+    class A3,D4,A5,E2,A7a,A7b,A7c,D9,A10,A11 wt;
