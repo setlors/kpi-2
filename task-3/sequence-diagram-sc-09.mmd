@@ -7,11 +7,11 @@ sequenceDiagram
     U->>+T: addExercise(workout_id, exercise_id, sets=3, reps=15, weight_kg=0)
     T->>+T: validateEntry(sets, reps, weight_kg)
     T-->>-T: valid or invalid
-    alt weight_kg >= 0, so weight_kg = 0 is accepted (R-07)
+    alt sets > 0, reps > 0, weight_kg >= 0, so weight_kg = 0 is accepted (R-07)
         T->>+WE: create(workout_id, exercise_id, sets, reps, weight_kg)
         WE-->>-T: WORKOUT_EXERCISE created
         T-->>U: exercise added
-    else weight_kg < 0 (see SC-08)
+    else values are invalid (see SC-08)
         T-->>U: validation error
     end
     deactivate T
