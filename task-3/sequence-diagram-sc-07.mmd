@@ -5,11 +5,13 @@ sequenceDiagram
 
     Note over U,T: SC-07 (R-06). Authenticated user with an existing workout
     U->>+T: addExercise(workout_id, exercise_id, sets=3, reps=10, weight_kg=60)
-    Note right of U: "Bench press" is picked by name,<br/>but the call takes exercise_id
     T->>+T: validateEntry(sets, reps, weight_kg)
-    T-->>-T: valid
-    opt sets > 0, reps > 0, weight_kg >= 0 (R-07)
+    T-->>-T: valid or invalid
+    alt sets > 0, reps > 0, weight_kg >= 0 (R-07)
         T->>+WE: create(workout_id, exercise_id, sets, reps, weight_kg)
         WE-->>-T: WORKOUT_EXERCISE created
+        T-->>U: exercise added
+    else values are invalid (see SC-08)
+        T-->>U: validation error
     end
-    T-->>-U: exercise added
+    deactivate T
