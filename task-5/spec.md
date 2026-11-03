@@ -25,6 +25,7 @@ Outside the system:
 - History (`getHistory`): provided by HistoryService, required by UI.
 - Repository: provided by DataAccess, required by all services.
 - Notification (`sendReminder`): provided by NotificationService, required by ReminderScheduler.
+- Storage: provided by Database, required by DataAccess.
 
 ## Acceptance criteria
 
