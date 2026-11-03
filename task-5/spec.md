@@ -6,17 +6,17 @@ Show the architecture of the workout tracker as a component diagram: which parts
 
 Inside the system:
 
-- UI: the client that Guest and User work with.
+- UI: the client that Guest and User work with. (UC-04, UC-05, UC-06)
 - AuthService: registration, login, access check (UC-01, UC-02, UC-03, R-01 to R-04).
 - WorkoutService: creates workouts, adds exercises, validates values (UC-04, UC-05, R-05 to R-08).
 - HistoryService: shows the workouts of one user, newest first (UC-06, R-10).
 - ReminderScheduler: finds users who did not train for 7 days and asks for a reminder (UC-07, R-11).
-- DataAccess: reads and writes USER, WORKOUT, EXERCISE and WORKOUT_EXERCISE.
-- Database: stores the four tables from Task 1.
+- DataAccess: reads and writes USER, WORKOUT, EXERCISE and WORKOUT_EXERCISE. (R-01, R-05, R-06, R-10, R-11)
+- Database: stores the four tables from Task 1. (R-01, R-05, R-06)
 
 Outside the system:
 
-- NotificationService: sends the reminder to the user.
+- NotificationService: sends the reminder to the user. (UC-07, R-11)
 
 ## Interfaces
 
