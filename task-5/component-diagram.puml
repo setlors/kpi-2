@@ -1,0 +1,77 @@
+@startuml component-diagram
+title Workout tracker: component diagram
+
+left to right direction
+skinparam componentStyle uml2
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam ArrowColor #555555
+skinparam nodesep 35
+skinparam ranksep 60
+skinparam rectangle {
+  BorderColor #888888
+  BorderStyle dashed
+  BackgroundColor transparent
+}
+skinparam component {
+  BackgroundColor #F5F9FF
+  BorderColor #3B6EA8
+}
+skinparam component<<external>> {
+  BackgroundColor #FFF4E0
+  BorderColor #C07A00
+}
+skinparam interface {
+  BackgroundColor #FFFFFF
+  BorderColor #3B6EA8
+}
+
+rectangle "System boundary: Workout tracker" as SYS {
+
+  component "**UI**\nclient for Guest and User\n\nUC-01, UC-02, UC-04, UC-05, UC-06" as UI
+
+  component "**WorkoutService**\ncreates workouts, adds exercises,\nvalidates values\n\nUC-04, UC-05\nR-05, R-06, R-07, R-08" as Workout
+  component "**HistoryService**\nworkouts of one user, newest first\n\nUC-06, R-10" as History
+  component "**AuthService**\nregistration, login, access check\n\nUC-01, UC-02, UC-03\nR-01, R-02, R-03, R-04" as Auth
+  component "**ReminderScheduler**\nfinds users inactive for 7 days\n\nUC-07, R-11" as Scheduler
+
+  component "**DataAccess**\nreads and writes USER, WORKOUT,\nEXERCISE, WORKOUT_EXERCISE\n\nR-01, R-05, R-06, R-10, R-11" as DA
+  database "**Database**\nUSER, WORKOUT, EXERCISE,\nWORKOUT_EXERCISE\n\nR-01, R-05, R-06" as DB
+
+  interface "Workout\naddExercise,\nvalidateEntry, create" as IWorkout
+  interface "History\ngetHistory" as IHistory
+  interface "Auth\ncheckAccess" as IAuth
+  interface "Repository" as IRepo
+  interface "Storage" as IStorage
+}
+
+component "**NotificationService**\nsends the reminder to the user\n\nUC-07, R-11" <<external>> as NS
+interface "Notification\nsendReminder" as INotif
+
+' UI -> Workout / History
+UI        -down-( IWorkout
+IWorkout  -down- Workout
+UI        -down-( IHistory
+IHistory  -down- History
+
+' Workout / History -> Auth
+Workout   -down-( IAuth
+History   -down-( IAuth
+IAuth     -down- Auth
+
+' services -> Repository -> DataAccess
+Workout   -down-( IRepo
+History   -down-( IRepo
+Auth      -down-( IRepo
+Scheduler -down-( IRepo
+IRepo     -down- DA
+
+' DataAccess -> Database
+DA        -down-( IStorage
+IStorage  -down- DB
+
+' ReminderScheduler -> external NotificationService
+Scheduler -down-( INotif
+INotif    -down- NS
+
+@enduml
